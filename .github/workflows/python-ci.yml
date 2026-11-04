@@ -3,7 +3,7 @@ name: Python CI Pipeline
 env:
   APP_NAME: MyPythonApp
 
-on:
+"on":
   push:
   pull_request:
   workflow_dispatch:
