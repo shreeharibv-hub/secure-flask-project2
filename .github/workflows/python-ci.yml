@@ -23,3 +23,10 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+  code_check:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Python syntax
+        run: python -m compileall .
