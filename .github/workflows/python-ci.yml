@@ -1,7 +1,8 @@
 name: Python CI Pipeline
+
 env:
   APP_NAME: MyPythonApp
-# My first GitHub Actions workflow
+
 on:
   push:
   pull_request:
@@ -25,59 +26,28 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+
       - name: Display application name
         run: echo $APP_NAME
-      name: Python CI Pipeline
-      env:
-        APP_NAME: MyPythonApp
-      # My first GitHub Actions workflow
-      on:
-        push:
-        pull_request:
-        workflow_dispatch:
 
-      jobs:
-        test:
-          runs-on: ubuntu-latest
-
-          steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                python-version: '3.12'
-
-            - name: Install pytest
-              run: pip install pytest
-
-            - name: Run tests
-              run: pytest -v
-            - name: Display application name
-              run: echo $APP_NAME
-            - name: Verify GitHub secret
-              env:
-                  DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
-              run: |
-                  if [ -n "$DEMO_PASSWORD" ]; then
-                    echo "Secret is available"
-                  else
-                    echo "Secret is missing"
-                    exit 1
-                  fi
-        code_check:
-          needs: test
-          runs-on: ubuntu-latest
-
-          steps:
-            - name: Check Python syntax
-              run: python -m compileall .
+      - name: Verify GitHub secret
+        env:
+          DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+        run: |
+          if [ -n "$DEMO_PASSWORD" ]; then
+            echo "Secret is available"
+          else
+            echo "Secret is missing"
+            exit 1
+          fi
 
   code_check:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Check Python syntax
         run: python -m compileall .
