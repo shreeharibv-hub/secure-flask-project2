@@ -27,6 +27,16 @@ jobs:
         run: pytest -v
       - name: Display application name
         run: echo $APP_NAME
+      - name: Verify GitHub secret
+          env:
+            DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+          run: |
+            if [ -n "$DEMO_PASSWORD" ]; then
+              echo "Secret is available"
+            else
+              echo "Secret is missing"
+              exit 1
+            fi
   code_check:
     needs: test
     runs-on: ubuntu-latest
