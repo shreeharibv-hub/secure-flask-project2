@@ -1,4 +1,6 @@
 name: Python CI Pipeline
+env:
+  APP_NAME: MyPythonApp
 # My first GitHub Actions workflow
 on:
   push:
@@ -23,6 +25,8 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+      - name: Display application name
+        run: echo $APP_NAME
   code_check:
     needs: test
     runs-on: ubuntu-latest
