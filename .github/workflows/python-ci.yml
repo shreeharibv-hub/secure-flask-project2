@@ -3,7 +3,7 @@ name: Python CI Pipeline
 env:
   APP_NAME: MyPythonApp
 
-"on":
+on:
   push:
   pull_request:
   workflow_dispatch:
@@ -26,6 +26,9 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+      - name: Confirm tests passed
+        if: success()
+        run: echo "All tests passed successfully!"
 
       - name: Display application name
         run: echo $APP_NAME
