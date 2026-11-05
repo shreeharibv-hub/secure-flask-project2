@@ -1,5 +1,8 @@
 name: Python CI Pipeline
 
+permissions:
+  contents: read
+
 env:
   APP_NAME: MyPythonApp
 
