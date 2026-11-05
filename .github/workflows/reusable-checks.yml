@@ -1,0 +1,15 @@
+name: Reusable Python Checks
+
+on:
+  workflow_call:
+
+jobs:
+  python-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Python syntax
+        run: python -m compileall .

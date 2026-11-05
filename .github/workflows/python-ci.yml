@@ -58,16 +58,46 @@ jobs:
             echo "Secret is missing"
             exit 1
           fi
+  
 
-  code_check:
+
+  reusable_checks:
     needs: test
+    uses: ./.github/workflows/reusable-checks.yml
+  deploy_staging:
+    needs: [ test, reusable_checks ]
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Deploy to staging
+        run: echo "Deploying application to staging!"
+      - name: Verify staging secret
+        env:
+          API_KEY: ${{ secrets.STAGING_API_KEY }}
+        run: |
+          if [ -n "$API_KEY" ]; then
+            echo "Staging secret is available"
+          else
+            echo "Staging secret is missing"
+            exit 1
+          fi
+  deploy_production:
+    needs: deploy_staging
+    runs-on: ubuntu-latest
+    environment: production
 
-      - name: Check Python syntax
-        run: python -m compileall .
-      - name: Display application version
-        run: echo "Version is ${{ needs.test.outputs.app_version }}"
+    steps:
+      - name: Deploy to production
+        run: echo "Deploying application to production!"
+
+      - name: Verify production secret
+        env:
+          API_KEY: ${{ secrets.PRODUCTION_API_KEY }}
+        run: |
+          if [ -n "$API_KEY" ]; then
+            echo "Production secret is available"
+          else
+            echo "Production secret is missing"
+            exit 1
+          fi
