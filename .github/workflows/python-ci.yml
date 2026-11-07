@@ -76,6 +76,17 @@ jobs:
   reusable_checks:
     needs: test
     uses: ./.github/workflows/reusable-checks.yml
+  docker_build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [ test, reusable_checks ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t secure-flask-app:${{ github.sha }} .
 
   # JOB 3: STAGING DEPLOYMENT
   deploy_staging:
@@ -97,6 +108,7 @@ jobs:
 
       - name: Deploy to staging
         run: echo "Deploying application to staging!"
+
 
   # JOB 4: PRODUCTION DEPLOYMENT
   deploy_production:
